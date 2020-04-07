@@ -18,10 +18,16 @@ CHAMP_MASTERY_URL = {
     'all_champs': 'http://ddragon.leagueoflegends.com/cdn/10.7.1/data/en_US/champion.json'
 }
 
+MATCH_URL = {
+    'base': 'https://{proxy}.api.riotgames.com/lol/match/{url}',
+    'matchlists_by_account': 'v{version}/matchlists/by-account/{account_id}?api_key={api_key}'
+}
+
 API_VERSIONS = {
     'summoner_version': '4',
     'league_version': '4',
-    'champion_mastery_version': '4'
+    'champion_mastery_version': '4',
+    'match_version': '4'
 }
 
 # DO NOT TOUCH THIS DICTIONARY
