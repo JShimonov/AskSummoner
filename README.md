@@ -15,3 +15,8 @@ Also learning Python in the process, which is another plus.
 
 - [ ] Find stats on champions based on match history
 - [ ] display most recent match history
+
+## Things to add after all API features are covered
+
+- [ ] Implement as web application
+- [ ] Implement in a Discord bot
