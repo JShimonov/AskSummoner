@@ -1,12 +1,16 @@
 from SummonerAPI import SummonerAPI
 from LeagueAPI import LeagueAPI
 from ChampMasteryAPI import ChampMasteryAPI
+from MatchAPI import MatchAPI
+
 import LoLConsts as Consts
 
 def main():
-    api = SummonerAPI(Consts.KEY['api_key'])
-    api2 = LeagueAPI(Consts.KEY['api_key'])
-    api3 = ChampMasteryAPI(Consts.KEY['api_key'])
+    api = SummonerAPI(Consts.KEY['api_key'])            # SummonerAPI Test
+    api2 = LeagueAPI(Consts.KEY['api_key'])             # LeagueAPI Test
+    api3 = ChampMasteryAPI(Consts.KEY['api_key'])       # MasteryAPI Test
+    api4 = MatchAPI(Consts.KEY['api_key'])              # MatchAPI Test
+
     summoner = input("Enter your summoner name: ")
     
     summoner = api.get_summoner_by_name(summoner)       # summoner is vital - never delete this
@@ -15,7 +19,7 @@ def main():
     #print(summoner)
     #print("")
     summoner_id = summoner['id']                        # keep summoner_id
-
+    account_id = summoner['accountId']                  # keep the accountID
 
     league = api2.rank_of_summoner(summoner_id)
 
@@ -34,15 +38,9 @@ def main():
     for i in range(5):                                          # iterate thru masteries, and append all champId's into the list
         champ_id.append(api3.get_champion(str(mastery[i]['championId'])) + " - " + str(mastery[i]['championPoints']) + " mastery points")
     print(champ_id)
-    # print(api3.get_champion('1'))
 
-    champ_counter = 0                                   # return counter back to 0
-    # print(Consts.CHAMP_MASTERY_URL['all_champs'])
-    # print(api3.all_champions())
-
-
-
-    #print(str(mastery[0]['championId']))
+    matches = api4.get_matches(account_id)
+    print(matches['matches'][0]['gameId'])
 
 if __name__ == "__main__":
     main()
