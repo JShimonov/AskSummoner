@@ -14,7 +14,8 @@ Also learning Python in the process, which is another plus.
 ## Things to add in the future
 
 - [ ] Find stats on champions based on match history
-- [ ] display most recent match history
+- [ ] Display most recent match history
+- [ ] Calculate average rank in matches
 
 ## Things to add after all API features are covered
 
