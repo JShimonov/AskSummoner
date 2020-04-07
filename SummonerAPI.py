@@ -16,10 +16,6 @@ class SummonerAPI():
             Consts.SUMMONER_URL['base'].format(
                 proxy = self.region,
                 url = api_url
-            ),
-            Consts.LEAGUE_URL['base'].format(
-                proxy = self.region,
-                url = api_url
             )
         )
         params = args
