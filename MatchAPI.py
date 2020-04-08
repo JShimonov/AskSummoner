@@ -21,10 +21,18 @@ class MatchAPI():
         params = args
         return response.json()
 
-    def get_matches(self, acct_id):
+    def get_matchlist(self, acct_id):
         api_url = Consts.MATCH_URL['matchlists_by_account'].format(
             version = Consts.API_VERSIONS['match_version'],
             account_id = acct_id,
+            api_key = Consts.KEY['api_key']
+        )
+        return self._request(api_url)
+
+    def get_match(self, match_id):
+        api_url = Consts.MATCH_URL['matches'].format(
+            version = Consts.API_VERSIONS['match_version'],
+            matchId = match_id,
             api_key = Consts.KEY['api_key']
         )
         return self._request(api_url)

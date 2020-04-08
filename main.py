@@ -33,14 +33,21 @@ def main():
         count = count+1 
     #print(len(league))
 
-    mastery = api3.get_all_masteries(summoner_id)       # gets all the masteries for that summoneer
-    champ_id = []                                       # making a list to store all the champions
+    mastery = api3.get_all_masteries(summoner_id)               # gets all the masteries for that summoneer
+    champ_id = []                                               # making a list to store all the champions
     for i in range(5):                                          # iterate thru masteries, and append all champId's into the list
         champ_id.append(api3.get_champion(str(mastery[i]['championId'])) + " - " + str(mastery[i]['championPoints']) + " mastery points")
     print(champ_id)
 
-    matches = api4.get_matches(account_id)
-    print(matches['matches'][0]['gameId'])
+    matchlist = api4.get_matchlist(account_id)
+    matchId = matchlist['matches'][0]['gameId']                   # vital for get_match information
+    champion_in_match = matchlist['matches'][0]['champion']       # vital for get_match information
+    
+    # try to print out the name of the champion given the champion_in_match
+    match = api4.get_match(matchId)
+    #print(type(match['participantIdentities']))
+    for i in match['participantIdentities']:
+        print(i['player']['summonerName'])
 
 if __name__ == "__main__":
     main()

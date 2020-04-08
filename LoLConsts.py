@@ -1,5 +1,5 @@
 KEY = {
-    'api_key': 'RGAPI-9a268ce4-defe-40d4-874a-2fcb3a4ba90c'
+    'api_key': 'RGAPI-7805cea3-8258-408d-ad40-416808025bf0'
 }
 
 SUMMONER_URL = {
@@ -20,7 +20,8 @@ CHAMP_MASTERY_URL = {
 
 MATCH_URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/match/{url}',
-    'matchlists_by_account': 'v{version}/matchlists/by-account/{account_id}?api_key={api_key}'
+    'matchlists_by_account': 'v{version}/matchlists/by-account/{account_id}?api_key={api_key}',
+    'matches': 'v{version}/matches/{matchId}?api_key={api_key}'
 }
 
 API_VERSIONS = {
