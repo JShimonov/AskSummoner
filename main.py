@@ -43,9 +43,8 @@ def main():
     matchId = matchlist['matches'][0]['gameId']                   # vital for get_match information
     champion_in_match = matchlist['matches'][0]['champion']       # vital for get_match information
     
-    # try to print out the name of the champion given the champion_in_match
     match = api4.get_match(matchId)
-    #print(type(match['participantIdentities']))
+    print("")
     for i in match['participantIdentities']:
         if (i['participantId'] < 6):
             print("team 1 " + i['player']['summonerName'])
@@ -54,11 +53,11 @@ def main():
         sumId = i['player']['summonerId']
         league = api2.rank_of_summoner(sumId)
         count = 0
-        for i in league:
-            if i['queueType'] == 'RANKED_SOLO_5x5':
-                print(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked solo/duo queue") 
-            elif i['queueType'] == 'RANKED_FLEX_SR':
-                print(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked flex queue")   
+        for j in league:
+            if j['queueType'] == 'RANKED_SOLO_5x5':
+                print(i['player']['summonerName'] + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked solo/duo queue") 
+            elif j['queueType'] == 'RANKED_FLEX_SR':
+                print(i['player']['summonerName'] + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked flex queue")   
             count = count+1
         print("")
 
