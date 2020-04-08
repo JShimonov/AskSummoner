@@ -47,7 +47,20 @@ def main():
     match = api4.get_match(matchId)
     #print(type(match['participantIdentities']))
     for i in match['participantIdentities']:
-        print(i['player']['summonerName'])
+        if (i['participantId'] < 6):
+            print("team 1 " + i['player']['summonerName'])
+        else:
+            print("team 2 " + i['player']['summonerName'])
+        sumId = i['player']['summonerId']
+        league = api2.rank_of_summoner(sumId)
+        count = 0
+        for i in league:
+            if i['queueType'] == 'RANKED_SOLO_5x5':
+                print(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked solo/duo queue") 
+            elif i['queueType'] == 'RANKED_FLEX_SR':
+                print(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked flex queue")   
+            count = count+1
+        print("")
 
 if __name__ == "__main__":
     main()
