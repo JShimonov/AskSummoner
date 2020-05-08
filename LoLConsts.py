@@ -1,10 +1,11 @@
 KEY = {
-    'api_key': 'RGAPI-7805cea3-8258-408d-ad40-416808025bf0'
+    'api_key': 'RGAPI-b4473301-94ae-456a-9d04-18cc8a05b82e'
 }
 
 SUMMONER_URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/summoner/{url}',
-    'summoner_by_name': 'v{version}/summoners/by-name/{names}?api_key={api_key}'
+    'summoner_by_name': 'v{version}/summoners/by-name/{names}?api_key={api_key}',
+    'summoner_by_summoner_id': 'v{version}/summoners/{summoner_id}?api_key={api_key}'
 }
 
 LEAGUE_URL = {
@@ -24,11 +25,18 @@ MATCH_URL = {
     'matches': 'v{version}/matches/{matchId}?api_key={api_key}'
 }
 
+CLASH_URL = {
+    'base': 'https://{proxy}.api.riotgames.com/lol/clash/{url}',
+    'players_by_summoner': 'v{version}/players/by-summoner/{summoner_id}?api_key={api_key}',
+    'teams_by_id': 'v{version}/teams/{team_id}?api_key={api_key}'
+}
+
 API_VERSIONS = {
     'summoner_version': '4',
     'league_version': '4',
     'champion_mastery_version': '4',
-    'match_version': '4'
+    'match_version': '4',
+    'clash_version': '1'
 }
 
 # DO NOT TOUCH THIS DICTIONARY

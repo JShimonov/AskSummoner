@@ -23,10 +23,18 @@ class SummonerAPI():
         # print(response.url)
         return response.json()
 
-    def get_summoner_by_name(self, name) :
+    def get_summoner_by_name(self, name):
         api_url = Consts.SUMMONER_URL['summoner_by_name'].format(
             version = Consts.API_VERSIONS['summoner_version'],
             names = name,
+            api_key = Consts.KEY['api_key']
+        )
+        return self._request(api_url)
+
+    def get_summoner_by_summoner_id(self, id):
+        api_url = Consts.SUMMONER_URL['summoner_by_summoner_id'].format(
+            version = Consts.API_VERSIONS['summoner_version'],
+            summoner_id = id,
             api_key = Consts.KEY['api_key']
         )
         return self._request(api_url)
