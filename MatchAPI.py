@@ -1,6 +1,9 @@
 import LoLConsts as Consts
 import requests
 
+# This is by far the coolest API, gives access to most parts of the player and the value of the player themselves
+# -> shows if the Summoner is a carry, a team player, or just not good at the moment
+
 class MatchAPI():
 
     def __init__(self, api_key, region = Consts.REGIONS['north_america']):

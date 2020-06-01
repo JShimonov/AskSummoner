@@ -1,5 +1,7 @@
+import os
+
 KEY = {
-    'api_key': 'RGAPI-b4473301-94ae-456a-9d04-18cc8a05b82e'
+    'api_key': os.environ.get('API_KEY')
 }
 
 SUMMONER_URL = {
