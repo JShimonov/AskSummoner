@@ -36,14 +36,3 @@ client.run(TOKEN)
 
 
 
-#import discord
-#from discord.ext import commands
-
-#client = commands.Bot(command_prefix = '.')
-
-#@client.event
-#async def on_ready():
-#    print('Bot is ready.')
-
-#client.run('NzIwMzEzMjc5MjcyMTg5OTk0.XuEKEg.grW84D7twqQh25qIiqti7UWNS0w')
-#NzIwMzEzMjc5MjcyMTg5OTk0.XuEKEg.grW84D7twqQh25qIiqti7UWNS0w
