@@ -1,6 +1,6 @@
 # bot.py
 import os
-
+import main
 import discord
 from dotenv import load_dotenv
 
@@ -28,6 +28,7 @@ async def on_message(message):
     league_status = '-lol'
     if message.content == '-lol':
         await message.channel.send(league_status)
+
 
 client.run(TOKEN)
 
