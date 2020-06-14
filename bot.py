@@ -73,7 +73,11 @@ async def on_message(message):
         # find the rank of the summoner
         if message.content.startswith('-lol rank '):
             # test if it works
-            await message.channel.send(str(summoner['name']) + " is level " + str(summoner['summonerLevel']))
+            count = 0
+            for i in league:
+                if i['queueType'] == 'RANKED_SOLO_5x5':
+                    await message.channel.send(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'])
+            
 
         # find the 5 most played champs
         if message.content.startswith('-lol champs '):
@@ -85,9 +89,9 @@ async def on_message(message):
                     champ_occurrences[games['champion']] = 1
             
             three_highest = nlargest(3, champ_occurrences, key = champ_occurrences.get)
-            await message.channel.send("Champion : Amount of times played")
+            await message.channel.send("**Most Played Champion in Ranked**")
             for val in three_highest:
-                await message.channel.send(re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + " : " + str(champ_occurrences.get(val)) + " games player in ranked")
+                await message.channel.send('   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games")
             
             # await message.channel.send("this is the total amount of games " + str(matchlist_ranked['totalGames']))
 
