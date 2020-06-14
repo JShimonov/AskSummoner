@@ -4,7 +4,15 @@ from ChampMasteryAPI import ChampMasteryAPI as ChampMastery
 from MatchAPI import MatchAPI as Match
 from ClashAPI import ClashAPI as Clash
 
+from heapq import nlargest
+
 import LoLConsts as Consts
+import operator
+import re
+import math
+
+def roundup(x):
+    return int(math.ceil(x / 100.0)) * 100
 
 def main():
     SummonerAPI = Summoner(Consts.KEY['api_key'])               # SummonerAPI Test
@@ -12,6 +20,8 @@ def main():
     ChampMasteryAPI = ChampMastery(Consts.KEY['api_key'])       # MasteryAPI Test
     MatchAPI = Match(Consts.KEY['api_key'])                     # MatchAPI Test
     ClashAPI = Clash(Consts.KEY['api_key'])                     # ClashAPI Test
+
+   
 
     summoner = input("Enter your summoner name: ")
     
@@ -27,6 +37,7 @@ def main():
 
     # check for rank in solo/duo queue
     count = 0
+    #print(league)
     for i in league:
         if i['queueType'] == 'RANKED_SOLO_5x5':
             print(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'] + " with " + str(league[count]['leaguePoints']) + "LP" + " in ranked solo/duo queue") 
@@ -44,14 +55,36 @@ def main():
 
     # This accesses the matches of the Summoner
     matchlist = MatchAPI.get_matchlist(account_id)
+
+
+    matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13)           # this gets all the ranked matches 
+    gameId_dict = {}                                                                # this will store the matchId and the champion that was player
+    champ_occurrences = {}                                                          # this will store the amount of times that a champion was played
+    # offset = 0
+    print("this is the total amount of games", matchlist_ranked['totalGames'])
+
+    for games in matchlist_ranked['matches']:
+        gameId_dict[games['gameId']] = games['champion']
+        if games['champion'] in champ_occurrences:
+            champ_occurrences[games['champion']] += 1
+        else:
+            champ_occurrences[games['champion']] = 1
+    
+    three_highest = nlargest(3, champ_occurrences, key = champ_occurrences.get)
+    print("Champion : Amount of times played")
+    for val in three_highest:
+        print(re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))), ":", champ_occurrences.get(val))
+    
+
+
     matchId = matchlist['matches'][0]['gameId']                   # vital for get_match information
     #print(matchId)
-    champion_in_match = matchlist['matches'][0]['champion']       # vital for get_match information
+    #champion_in_match = matchlist['matches'][0]['champion']       # vital for get_match information
     
     # Access the most recent match
     match = MatchAPI.get_match(matchId)
     print("\nHere are the stats of your previous game:")
-    stats = 0
+    #stats = 0
     player_counter = 0
     kda_dict = {}
     for i in match['participants']:
@@ -94,6 +127,8 @@ def main():
             sumId = i['summonerId']                                             # This is the raw summonerId -> convert to IGN
             name = SummonerAPI.get_summoner_by_summoner_id(sumId)['name']       # This gives their IGN
             print(""+ name + " -> " + i['position'])
+
+    
     
 
 

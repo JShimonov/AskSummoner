@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 KEY = {
-    'api_key': os.environ.get('API_KEY')
+    'api_key': os.getenv('API_KEY')
 }
 
 SUMMONER_URL = {
@@ -24,6 +27,7 @@ CHAMP_MASTERY_URL = {
 MATCH_URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/match/{url}',
     'matchlists_by_account': 'v{version}/matchlists/by-account/{account_id}?api_key={api_key}',
+    'matchlists_by_account_ranked': 'v{version}/matchlists/by-account/{account_id}?queue={queue}&season={season}&api_key={api_key}',
     'matches': 'v{version}/matches/{matchId}?api_key={api_key}'
 }
 

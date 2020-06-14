@@ -27,7 +27,7 @@ class SummonerAPI():
         api_url = Consts.SUMMONER_URL['summoner_by_name'].format(
             version = Consts.API_VERSIONS['summoner_version'],
             names = name,
-            api_key = Consts.KEY['api_key']
+            api_key = Consts.KEY['api_key']            
         )
         return self._request(api_url)
 
