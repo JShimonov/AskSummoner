@@ -42,7 +42,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-<<<<<<< HEAD
     # rather than putting all of the vital lines of code in each if statement
     # we can just put them all in the on_message method
     # and then put all the specific code inside of the future if statements
@@ -95,11 +94,6 @@ async def on_message(message):
                 await message.channel.send('   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games")
             
             # await message.channel.send("this is the total amount of games " + str(matchlist_ranked['totalGames']))
-=======
-    league_status = 'you are silver 3'
-    if message.content == '-lol':
-        await message.channel.send(league_status)
->>>>>>> 2f3c450d2a8de8e8ba1ede9b37729e84d8f00d0b
 
             
 
