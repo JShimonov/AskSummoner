@@ -42,7 +42,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-<<<<<<< HEAD
     # rather than putting all of the vital lines of code in each if statement
     # we can just put them all in the on_message method
     # and then put all the specific code inside of the future if statements
@@ -65,11 +64,13 @@ async def on_message(message):
         account_id = summoner['accountId']
 
         league = LeagueAPI.rank_of_summoner(summoner_id)
-        matchlist = MatchAPI.get_matchlist(account_id)
+        # matchlist = MatchAPI.get_matchlist(account_id)
 
-        matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13)
-        gameId_dict = {}                                                                # this will store the matchId and the champion that was player
-        champ_occurrences = {}
+        end_index = 100
+        begin_index = 0
+        gameId_dict = {}                                                                                        # this will store the matchId and the champion that was player
+        champ_occurrences = {}                                                                                  # this will store the amount of times that a champion was played
+        matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches
 
         # find the rank of the summoner
         if message.content.startswith('-lol rank '):
@@ -77,29 +78,29 @@ async def on_message(message):
             count = 0
             for i in league:
                 if i['queueType'] == 'RANKED_SOLO_5x5':
-                    await message.channel.send(str(summoner['name']) + " is " + league[count]['tier']+ " " +league[count]['rank'])
+                    await message.channel.send(str(summoner['name']) + " is " + league[count]['tier'].title() + " " +league[count]['rank'])
             
 
         # find the 5 most played champs
         if message.content.startswith('-lol champs '):
-            for games in matchlist_ranked['matches']:
-                gameId_dict[games['gameId']] = games['champion']
-                if games['champion'] in champ_occurrences:
-                    champ_occurrences[games['champion']] += 1
-                else:
-                    champ_occurrences[games['champion']] = 1
+            while begin_index < matchlist_ranked['totalGames']:
+                matches = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)
+                print(str(begin_index), str(end_index))
+                for games in matches['matches']:
+                    gameId_dict[games['gameId']] = games['champion']
+                    if games['champion'] in champ_occurrences:
+                        champ_occurrences[games['champion']] += 1
+                    else:
+                        champ_occurrences[games['champion']] = 1
+                end_index += 100
+                begin_index += 100
             
             three_highest = nlargest(3, champ_occurrences, key = champ_occurrences.get)
-            await message.channel.send("**Most Played Champion in Ranked**")
+            await message.channel.send("**Top 3 Most Played Champions in Ranked**")
             for val in three_highest:
                 await message.channel.send('   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games")
             
             # await message.channel.send("this is the total amount of games " + str(matchlist_ranked['totalGames']))
-=======
-    league_status = 'you are silver 3'
-    if message.content == '-lol':
-        await message.channel.send(league_status)
->>>>>>> 2f3c450d2a8de8e8ba1ede9b37729e84d8f00d0b
 
             
 

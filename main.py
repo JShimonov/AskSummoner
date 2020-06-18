@@ -56,19 +56,24 @@ def main():
     # This accesses the matches of the Summoner
     matchlist = MatchAPI.get_matchlist(account_id)
 
-
-    matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13)           # this gets all the ranked matches 
-    gameId_dict = {}                                                                # this will store the matchId and the champion that was player
-    champ_occurrences = {}                                                          # this will store the amount of times that a champion was played
-    # offset = 0
+    end_index = 100
+    begin_index = 0
+    gameId_dict = {}                                                                                        # this will store the matchId and the champion that was player
+    champ_occurrences = {}                                                                                  # this will store the amount of times that a champion was played
+    matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches 
     print("this is the total amount of games", matchlist_ranked['totalGames'])
 
-    for games in matchlist_ranked['matches']:
-        gameId_dict[games['gameId']] = games['champion']
-        if games['champion'] in champ_occurrences:
-            champ_occurrences[games['champion']] += 1
-        else:
-            champ_occurrences[games['champion']] = 1
+    while begin_index < matchlist_ranked['totalGames']:
+        matches = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)
+        print(str(begin_index), str(end_index))
+        for games in matches['matches']:
+            gameId_dict[games['gameId']] = games['champion']
+            if games['champion'] in champ_occurrences:
+                champ_occurrences[games['champion']] += 1
+            else:
+                champ_occurrences[games['champion']] = 1
+        end_index += 100
+        begin_index += 100
     
     three_highest = nlargest(3, champ_occurrences, key = champ_occurrences.get)
     print("Champion : Amount of times played")
