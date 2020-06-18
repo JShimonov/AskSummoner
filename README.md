@@ -12,6 +12,7 @@ Also learning Python in the process, which is another plus.
 - [x] Find all their ranks in solo/duo queue and flex queue
 - [x] find their most played champions based on mastery
 - [x] Display most recent match history
+- [x] Implement as Discord bot
 
 ## Things to add in the future
 
@@ -21,4 +22,4 @@ Also learning Python in the process, which is another plus.
 ## Things to add after all API features are covered
 
 - [ ] Implement as web application
-- [ ] Implement in a Discord bot
+
