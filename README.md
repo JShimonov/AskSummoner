@@ -14,10 +14,14 @@ Also learning Python in the process, which is another plus.
 - [x] Display most recent match history
 - [x] Implement as Discord bot
 
+## Problems that I ran into
+
+In working with the API and gathering necessary information for the bot, I realized that the Match API that Riot supplies is very faulty with their matchlist parameters. What this means is that when you enter a specific season for the matchlists, much more matches are brought back in the response. As a result, I realized that this information can be gathered from an existing source (AKA op.gg). Though they managed to gather all the proper information from Riot's API to show the correct matchlists, it makes more sense to rely on the information that they had already gathered. With op.gg's information on a summoner's champion KDA, I still will have to use Riot's Match API in determining whether the summoner has improved their plays with their champion.
+
 ## Things to add in the future
 
-- [ ] Find stats on champions based on match history
-- [ ] Calculate average rank in matches
+- [ ] Differentiate the average of all KDA on a champion to most recent games of that champion KDA
+- [ ] Calculate average rank in recent matches
 
 ## Things to add after all API features are covered
 
