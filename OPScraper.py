@@ -12,12 +12,12 @@ results = soup.find(class_='MostChampionContent')
 champs = results.find_all('div', class_='ChampionBox Ranked')
 
 for champ in champs:
-    champion = champs.find()
-    kda = champs.find()
-    win_rate = champs.find()
+    champion = champ.find('div', class_='ChampionName')
+    kda = champ.find('span', class_='KDA')
+    win_rate = champ.find('div', class_='WinRatio normal tip tpd-delegation-uid-1')
 
-    print('Champion : ' + champion)
-    print('kda : ' + kda)
-    print('Win Rate : ' + win_rate)
+    print(champion)
+    print(kda)
+    print(win_rate)
 
 print(champs)
