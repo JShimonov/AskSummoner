@@ -37,6 +37,10 @@ CLASH_URL = {
     'teams_by_id': 'v{version}/teams/{team_id}?api_key={api_key}'
 }
 
+OP_GG_URL = {
+    'base': 'https://na.op.gg/summoner/userName={name}'
+}
+
 API_VERSIONS = {
     'summoner_version': '4',
     'league_version': '4',
