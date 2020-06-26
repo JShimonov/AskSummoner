@@ -14,10 +14,22 @@ champs = results.find_all('div', class_='ChampionBox Ranked')
 for champ in champs:
     champion = champ.find('div', class_='ChampionName')
     kda = champ.find('span', class_='KDA')
-    win_rate = champ.find('div', class_='WinRatio normal tip tpd-delegation-uid-1')
+    played = champ.find('div', class_='Played')
 
-    print(champion)
-    print(kda)
-    print(win_rate)
+    winRatio = played.find('div', title='Win Ratio')
+    totalPlayed = played.find('div', class_='Title')
+    # if None in (champion, kda, win_rate):
+    #     continue
 
-print(champs)
+    champion = champion.text.strip()
+    kda = kda.text.strip()
+    win_ratio = winRatio.text.strip()
+    totalPlayed = totalPlayed.text.strip()
+
+    print("Champion: " + champion)
+    print("Your KDA for " + champion + " is " + kda)
+    print("Your win ratio for " + champion + " is " + win_ratio)
+    print("You have a total of " + totalPlayed + " games on " + champion)
+    print()
+
+# print(champs)
