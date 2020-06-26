@@ -29,7 +29,7 @@ for champ in champs:
     print("Champion: " + champion)
     print("Your KDA for " + champion + " is " + kda)
     print("Your win ratio for " + champion + " is " + win_ratio)
-    print("You have a total of " + totalPlayed + " games on " + champion)
+    print(str(totalPlayed).lower() + " games on " + champion)
     print()
 
 # print(champs)
