@@ -5,6 +5,7 @@ import operator
 import re
 import math
 import LoLConsts as Consts
+import requests
 
 # delete these
 import random
@@ -12,6 +13,7 @@ import random
 from heapq import nlargest
 from dotenv import load_dotenv
 from discord.ext import commands
+from bs4 import BeautifulSoup
 
 from SummonerAPI import SummonerAPI as Summoner
 from LeagueAPI import LeagueAPI as League
@@ -65,6 +67,8 @@ async def on_message(message):
         summoner_name = command[command.find(' ')+1:]                             # get the summoner name
         summoner = SummonerAPI.get_summoner_by_name(summoner_name)       # access the SummonerAPI based off of summoner_name
 
+        
+
         summoner_id = summoner['id']
         account_id = summoner['accountId']
 
@@ -89,25 +93,48 @@ async def on_message(message):
 
         # find the 5 most played champs
         if message.content.startswith('-lol champs '):
-            output = ''
-            while begin_index < matchlist_ranked['totalGames']:
-                matches = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)
-                print(str(begin_index), str(end_index))
-                for games in matches['matches']:
-                    gameId_dict[games['gameId']] = games['champion']
-                    if games['champion'] in champ_occurrences:
-                        champ_occurrences[games['champion']] += 1
-                    else:
-                        champ_occurrences[games['champion']] = 1
-                end_index += 100
-                begin_index += 100
-    
-            three_highest = nlargest(5, champ_occurrences, key = champ_occurrences.get)
-            output = "**Most Played Champion in Ranked**" + "\n"
-            #await message.channel.send("**Most Played Champion in Ranked**")
-            for val in three_highest:
-                output += '   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games\n"
+            output = '**Most Played Champs in Ranked for ' + summoner_name + "**\n"
+
+            # Web Scraper
+            URL = 'https://na.op.gg/summoner/userName=' + summoner_name
+            page = requests.get(URL)
+            soup = BeautifulSoup(page.content, 'html.parser')
+
+            results = soup.find(class_='MostChampionContent')
+
+            champs = results.find_all('div', class_='ChampionBox Ranked')
+
+            for champ in champs:
+                champion = champ.find('div', class_='ChampionName').text.strip()
+                kda = champ.find('span', class_='KDA').text.strip()
+
+                played = champ.find('div', class_='Played')
+                winRatio = played.find('div', title='Win Ratio').text.strip()
+                totalPlayed = played.find('div', class_='Title').text.strip()
+
+                output += "- **" + champion + "**\n"
+                output += "   - **KDA** : " + kda + "\n"
+                output += "   - **Win Ratio** : " + winRatio + "\n"
+                output += "   - **Total Played** : " + totalPlayed + "\n\n"
             await message.channel.send(output)
+            # while begin_index < matchlist_ranked['totalGames']:
+            #     matches = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)
+            #     print(str(begin_index), str(end_index))
+            #     for games in matches['matches']:
+            #         gameId_dict[games['gameId']] = games['champion']
+            #         if games['champion'] in champ_occurrences:
+            #             champ_occurrences[games['champion']] += 1
+            #         else:
+            #             champ_occurrences[games['champion']] = 1
+            #     end_index += 100
+            #     begin_index += 100
+    
+            # three_highest = nlargest(5, champ_occurrences, key = champ_occurrences.get)
+            # output = "**Most Played Champion in Ranked**" + "\n"
+            # #await message.channel.send("**Most Played Champion in Ranked**")
+            # for val in three_highest:
+            #     output += '   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games\n"
+            # await message.channel.send(output)
             
 
 client.run(TOKEN)
