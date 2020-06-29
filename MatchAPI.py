@@ -32,19 +32,16 @@ class MatchAPI():
         )
         return self._request(api_url)
     
-    def get_matchlist_ranked(self, acct_id, que, seas, end_index, begin_index):
+    def get_matchlist_ranked(self, acct_id, champ, que):
         api_url = Consts.MATCH_URL['matchlists_by_account_ranked'].format(
             version = Consts.API_VERSIONS['match_version'],
             account_id = acct_id,
+            champion = champ,
             queue = que,
-            season = seas,
-            endIndex = end_index,
-            beginIndex = begin_index,
             api_key = Consts.KEY['api_key']
         )
         return self._request(api_url)
 
-    # 
     def get_match(self, match_id):
         api_url = Consts.MATCH_URL['matches'].format(
             version = Consts.API_VERSIONS['match_version'],

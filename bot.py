@@ -77,9 +77,9 @@ async def on_message(message):
 
         end_index = 100
         begin_index = 0
-        gameId_dict = {}                                                                                        # this will store the matchId and the champion that was player
-        champ_occurrences = {}                                                                                  # this will store the amount of times that a champion was played
-        matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches 
+        #gameId_dict = {}                                                                                        # this will store the matchId and the champion that was player
+        #champ_occurrences = {}                                                                                  # this will store the amount of times that a champion was played
+        #matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches 
         
         # find the rank of the summoner
         if message.content.startswith('-lol rank '):
@@ -100,42 +100,28 @@ async def on_message(message):
             page = requests.get(URL)
             soup = BeautifulSoup(page.content, 'html.parser')
 
-            results = soup.find(class_='MostChampionContent')
+            # Summoner may not exist causing for an exception
+            try:
+                results = soup.find(class_='MostChampionContent')
 
-            champs = results.find_all('div', class_='ChampionBox Ranked')
+                champs = results.find_all('div', class_='ChampionBox Ranked')
 
-            for i in range(5):
-                champ = champs[i]
-                champion = champ.find('div', class_='ChampionName').text.strip()
-                kda = champ.find('span', class_='KDA').text.strip()
+                for i in range(5):
+                    champ = champs[i]
+                    champion = champ.find('div', class_='ChampionName').text.strip()
+                    kda = champ.find('span', class_='KDA').text.strip()
 
-                played = champ.find('div', class_='Played')
-                winRatio = played.find('div', title='Win Ratio').text.strip()
-                totalPlayed = played.find('div', class_='Title').text.strip()
+                    played = champ.find('div', class_='Played')
+                    winRatio = played.find('div', title='Win Ratio').text.strip()
+                    totalPlayed = played.find('div', class_='Title').text.strip()
 
-                output += "- **" + champion + "**\n"
-                output += "   - **KDA** : " + kda + "\n"
-                output += "   - **Win Ratio** : " + winRatio + "\n"
-                output += "   - **Total Played** : " + totalPlayed + "\n\n"
-            await message.channel.send(output)
-            # while begin_index < matchlist_ranked['totalGames']:
-            #     matches = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)
-            #     print(str(begin_index), str(end_index))
-            #     for games in matches['matches']:
-            #         gameId_dict[games['gameId']] = games['champion']
-            #         if games['champion'] in champ_occurrences:
-            #             champ_occurrences[games['champion']] += 1
-            #         else:
-            #             champ_occurrences[games['champion']] = 1
-            #     end_index += 100
-            #     begin_index += 100
-    
-            # three_highest = nlargest(5, champ_occurrences, key = champ_occurrences.get)
-            # output = "**Most Played Champion in Ranked**" + "\n"
-            # #await message.channel.send("**Most Played Champion in Ranked**")
-            # for val in three_highest:
-            #     output += '   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games\n"
-            # await message.channel.send(output)
+                    output += "- **" + champion + "**\n"
+                    output += "   - **KDA** : " + kda + "\n"
+                    output += "   - **Win Ratio** : " + winRatio + "\n"
+                    output += "   - **Total Played** : " + totalPlayed + "\n\n"
+                await message.channel.send(output)
+            except:
+                await message.channel.send("Summoner Does Not Exist")
         
         # Here we determine the difference in win rate in the last 10 games
         # as opposed to the total amount of games that the person has played
@@ -144,8 +130,8 @@ async def on_message(message):
         # Precondition: First we check the amount of games that op.gg shows for champ
             # if totalPlayed < 11 don't do anything
         if message.content.startswith('-lol stats '):
-
-            await message.channel.send('stats for ' + summoner_name)
+            output = '**Stats for ' + summoner_name + "**\n"
+            await message.channel.send(output)
             
             
 

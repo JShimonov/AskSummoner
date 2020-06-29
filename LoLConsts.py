@@ -27,7 +27,7 @@ CHAMP_MASTERY_URL = {
 MATCH_URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/match/{url}',
     'matchlists_by_account': 'v{version}/matchlists/by-account/{account_id}?api_key={api_key}',
-    'matchlists_by_account_ranked': 'v{version}/matchlists/by-account/{account_id}?queue={queue}&season={season}&endIndex={endIndex}&beginIndex={beginIndex}&api_key={api_key}',
+    'matchlists_by_account_ranked': 'v{version}/matchlists/by-account/{account_id}?champion={champion}&queue={queue}&api_key={api_key}',
     'matches': 'v{version}/matches/{matchId}?api_key={api_key}'
 }
 
