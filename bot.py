@@ -104,7 +104,8 @@ async def on_message(message):
 
             champs = results.find_all('div', class_='ChampionBox Ranked')
 
-            for champ in champs:
+            for i in range(5):
+                champ = champs[i]
                 champion = champ.find('div', class_='ChampionName').text.strip()
                 kda = champ.find('span', class_='KDA').text.strip()
 
@@ -135,6 +136,17 @@ async def on_message(message):
             # for val in three_highest:
             #     output += '   - **' + re.sub(r"(\w)([A-Z])", r"\1 \2", ChampMasteryAPI.get_champion(str(val))) + "** : " + str(champ_occurrences.get(val)) + " games\n"
             # await message.channel.send(output)
+        
+        # Here we determine the difference in win rate in the last 10 games
+        # as opposed to the total amount of games that the person has played
+        # The champions that we are selecting to compare are those found in the web scraper
+        # those champions will be queued into the Match API to show the diff in win rate
+        # Precondition: First we check the amount of games that op.gg shows for champ
+            # if totalPlayed < 11 don't do anything
+        if message.content.startswith('-lol stats '):
+
+            await message.channel.send('stats for ' + summoner_name)
+            
             
 
 client.run(TOKEN)
