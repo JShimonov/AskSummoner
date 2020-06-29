@@ -52,3 +52,10 @@ class ChampMasteryAPI():
         
     def get_champion(self, championId):
         return self.all_champions().get(championId)
+
+    def get_championId(self, championName):
+        key_list = list(self.all_champions().keys())
+        val_list = list(self.all_champions().values())
+        return(key_list[val_list.index(championName)])
+
+    
