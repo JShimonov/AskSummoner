@@ -67,7 +67,7 @@ async def on_message(message):
         summoner_name = command[command.find(' ')+1:]                             # get the summoner name
         summoner = SummonerAPI.get_summoner_by_name(summoner_name)       # access the SummonerAPI based off of summoner_name
 
-        
+        print(command)
 
         summoner_id = summoner['id']
         account_id = summoner['accountId']
@@ -75,14 +75,14 @@ async def on_message(message):
         league = LeagueAPI.rank_of_summoner(summoner_id)
         #matchlist = MatchAPI.get_matchlist(account_id)
 
-        end_index = 100
-        begin_index = 0
+        # end_index = 100
+        # begin_index = 0
         #gameId_dict = {}                                                                                        # this will store the matchId and the champion that was player
         #champ_occurrences = {}                                                                                  # this will store the amount of times that a champion was played
         #matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches 
         
         # find the rank of the summoner
-        if message.content.startswith('-lol rank '):
+        if command == "rank " + summoner_name:
             # test if it works
             count = 0
             for i in league:
@@ -92,7 +92,7 @@ async def on_message(message):
             
 
         # find the 5 most played champs
-        if message.content.startswith('-lol champs '):
+        if command == "champs " + summoner_name:
             output = '**Most Played Champs in Ranked for ' + summoner_name + "**\n"
 
             # Web Scraper
@@ -123,15 +123,42 @@ async def on_message(message):
             except:
                 await message.channel.send("Summoner Does Not Exist")
         
+
+
         # Here we determine the difference in win rate in the last 10 games
         # as opposed to the total amount of games that the person has played
         # The champions that we are selecting to compare are those found in the web scraper
         # those champions will be queued into the Match API to show the diff in win rate
         # Precondition: First we check the amount of games that op.gg shows for champ
             # if totalPlayed < 11 don't do anything
-        if message.content.startswith('-lol stats '):
+        if command == "stats " + summoner_name:
             output = '**Stats for ' + summoner_name + "**\n"
-            await message.channel.send(output)
+
+            # Web Scraper
+            URL = 'https://na.op.gg/summoner/userName=' + summoner_name
+            page = requests.get(URL)
+            soup = BeautifulSoup(page.content, 'html.parser')
+
+            try:
+                results = soup.find(class_='MostChampionContent')
+
+                champs = results.find_all('div', class_='ChampionBox Ranked')
+
+                for i in range(5):
+                    champ = champs[i]
+                    champion = champ.find('div', class_='ChampionName').text.strip()
+                    kda = champ.find('span', class_='KDA').text.strip()
+
+                    played = champ.find('div', class_='Played')
+                    winRatio = played.find('div', title='Win Ratio').text.strip()
+                    totalPlayed = played.find('div', class_='Title').text.strip()
+
+                    output += champion + "\n"
+                    output += "   - total games played:"
+                print(champion)
+                await message.channel.send(output)
+            except:
+                await message.channel.send("Summoner Does Not Exist")
             
             
 

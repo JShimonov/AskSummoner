@@ -47,7 +47,7 @@ class ChampMasteryAPI():
         champ_dict = array['data']
         dict = {}                       # this will hold all the id's to champ_keys
         for key in champ_dict:
-            dict[champ_dict[key]['key']] = key
+            dict[champ_dict[key]['key']] = champ_dict[key]['name']
         return dict
         
     def get_champion(self, championId):
