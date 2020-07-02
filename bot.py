@@ -67,16 +67,13 @@ async def on_message(message):
         summoner_name = command[command.find(' ')+1:]                             # get the summoner name
         summoner = SummonerAPI.get_summoner_by_name(summoner_name)       # access the SummonerAPI based off of summoner_name
 
-        print(command)
-
+        # summoner_name = summoner['name']
         summoner_id = summoner['id']
         account_id = summoner['accountId']
 
         league = LeagueAPI.rank_of_summoner(summoner_id)
         #matchlist = MatchAPI.get_matchlist(account_id)
 
-        # end_index = 100
-        # begin_index = 0
         #gameId_dict = {}                                                                                        # this will store the matchId and the champion that was player
         #champ_occurrences = {}                                                                                  # this will store the amount of times that a champion was played
         #matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches 
@@ -139,26 +136,87 @@ async def on_message(message):
             page = requests.get(URL)
             soup = BeautifulSoup(page.content, 'html.parser')
 
-            try:
-                results = soup.find(class_='MostChampionContent')
+            results = soup.find(class_='MostChampionContent')
 
-                champs = results.find_all('div', class_='ChampionBox Ranked')
+            champs = results.find_all('div', class_='ChampionBox Ranked')
 
-                for i in range(5):
-                    champ = champs[i]
-                    champion = champ.find('div', class_='ChampionName').text.strip()
-                    kda = champ.find('span', class_='KDA').text.strip()
+            for i in range(5):
+                champ = champs[i]
+                champion = champ.find('div', class_='ChampionName').text.strip()
+                kda = champ.find('span', class_='KDA').text.strip()
 
-                    played = champ.find('div', class_='Played')
-                    winRatio = played.find('div', title='Win Ratio').text.strip()
-                    totalPlayed = played.find('div', class_='Title').text.strip()
+                played = champ.find('div', class_='Played')
+                winRatio = played.find('div', title='Win Ratio').text.strip()
+                totalPlayed = played.find('div', class_='Title').text.strip()
 
-                    output += champion + "\n"
-                    output += "   - total games played:"
-                print(champion)
-                await message.channel.send(output)
-            except:
-                await message.channel.send("Summoner Does Not Exist")
+                totalPlayed_value = int(totalPlayed[:totalPlayed.find(' ')])
+
+                output += "- **" + champion + "**\n"
+                output += "   - **Total games played**: " + str(totalPlayed_value) + "\n"
+
+                if totalPlayed_value < 6:
+                    output += "   - **Average KDA**: " + kda + "\n\n"
+                else:
+                    output += "   - **Total KDA**: " + kda + "\n"
+
+                    # this part will analyze the past 10 games for the champion
+                    val = ChampMasteryAPI.get_championId(champion)
+                    champion_matchlist = MatchAPI.get_matchlist_ranked(account_id, val, 420)
+                    gameIds = []                                                                    # store the last 10 games in here
+                    counter = 0
+                    for match in champion_matchlist['matches']:
+                        if counter == 6:                                                            # the amount of games it calculates per champ
+                            break
+                        gameIds.append(match['gameId'])
+                        counter += 1
+                    
+                    # keep track of the kda
+                    kills = 0
+                    deaths = 1
+                    assists = 0
+                    
+                    # Great! now we iterate through the gameId list we made
+                    for game in gameIds:
+                        match = MatchAPI.get_match(game)                                            # gives access to the match details
+                        
+                        # iterate through the match participants
+                        for participant in match['participants']:
+                            # print(str(participant['championId']) + " : " + str(val))
+                            if str(participant['championId']) == str(val):
+                                print(participant['stats']['kills'])
+                                kills += participant['stats']['kills']
+                                assists += participant['stats']['assists']
+                                deaths += participant['stats']['deaths']
+                                break
+
+                    # Now all the games have been iterated thru for that champ
+                    # Calculate the kda for that champ
+                    # print(kills)
+                    # print(assists)
+                    # print(deaths)
+                    ten_game_kda = (kills+assists)/deaths
+                    rounded_kda = round(ten_game_kda*100)/100
+
+                    output += "   - **5 Most recent games KDA**: " + str(rounded_kda) + ":1\n"
+
+                    # Let's evaluate the difference of kda's
+                    # First get the value of the total kda before the colon
+                    kda_value = float(kda[:kda.find(':')])
+                    
+                    if rounded_kda > kda_value+1:
+                        output += "   - " + summoner_name + " will carry\n\n"
+                    elif rounded_kda > kda_value:
+                        output += "   - " + summoner_name + " is good and could potentially help carry\n\n"
+                    elif rounded_kda == kda_value:
+                        output += "   - " + summoner_name + " somehow managed to get his kda to equal his 5 day kda\n\n"
+                    elif rounded_kda < kda_value-1 or rounded_kda < 1.0:
+                        output += "   - **SHIT PLAYER!!! DO NOT LET THEM PLAY THIS CHAMPION, **\n\n"
+                    else:
+                        output += "   - " + summoner_name + " not that bad, probably had a couple of bad games, but be aware\n\n"
+
+            await message.channel.send(output)
+            # except:
+            #     await message.channel.send("Summoner Does Not Exist")
             
             
 
