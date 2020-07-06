@@ -131,17 +131,25 @@ async def on_message(message):
         # Precondition: First we check the amount of games that op.gg shows for champ
             # if totalPlayed < 11 don't do anything
         if command == "stats " + summoner_name:
-            output = '**Stats for ' + name + "**\n"
+            await message.channel.send(getStats(name))
+            
+def getStats(name):
+    
 
-            # Web Scraper
-            URL = 'https://na.op.gg/summoner/userName=' + summoner_name
-            page = requests.get(URL)
-            soup = BeautifulSoup(page.content, 'html.parser')
+    summoner = SummonerAPI.get_summoner_by_name(name)
+    account_id = summoner['accountId']
 
-            results = soup.find(class_='MostChampionContent')
+    # Web Scraper
+    URL = 'https://na.op.gg/summoner/userName=' + name
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'html.parser')
 
-            champs = results.find_all('div', class_='ChampionBox Ranked')
+    try:
+        output = '**Stats for ' + name + "**\n"
+        results = soup.find(class_='MostChampionContent')
 
+        champs = results.find_all('div', class_='ChampionBox Ranked')
+        try:
             for i in range(5):
                 champ = champs[i]
                 champion = champ.find('div', class_='ChampionName').text.strip()
@@ -161,10 +169,10 @@ async def on_message(message):
                 else:
                     output += "   - **Total KDA**: " + kda + "\n"
 
-                    # this part will analyze the past 10 games for the champion
+                    # this part will analyze the past 5 games for the champion
                     val = ChampMasteryAPI.get_championId(champion)
                     champion_matchlist = MatchAPI.get_matchlist_ranked(account_id, val, 420)
-                    gameIds = []                                                                    # store the last 10 games in here
+                    gameIds = []                                                                    # store the last 5 games in here
                     counter = 0
                     for match in champion_matchlist['matches']:
                         if counter == 6:                                                            # the amount of games it calculates per champ
@@ -206,21 +214,20 @@ async def on_message(message):
                     kda_value = float(kda[:kda.find(':')])
                     
                     if rounded_kda > kda_value+1:
-                        output += "   - " + summoner_name + " will carry\n\n"
+                        output += "   - " + name + " will carry\n\n"
                     elif rounded_kda > kda_value:
-                        output += "   - " + summoner_name + " is good and could potentially help carry\n\n"
+                        output += "   - " + name + " is good and could potentially help carry\n\n"
                     elif rounded_kda == kda_value:
-                        output += "   - " + summoner_name + " somehow managed to get his kda to equal his 5 day kda\n\n"
+                        output += "   - " + name + " somehow managed to get his kda to equal his 5 day kda\n\n"
                     elif rounded_kda < kda_value-1 or rounded_kda < 1.0:
                         output += "   - **SHIT PLAYER!!! DO NOT LET THEM PLAY THIS CHAMPION, **\n\n"
                     else:
-                        output += "   - " + summoner_name + " not that bad, probably had a couple of bad games, but be aware\n\n"
-
-            await message.channel.send(output)
-            # except:
-            #     await message.channel.send("Summoner Does Not Exist")
-            
-            
+                        output += "   - " + name + " not that bad, probably had a couple of bad games, but be aware\n\n"
+        except:
+            output += "   - " + name + " does not have 5 champions to analyze in ranked"
+        return output
+    except:
+        return "Summoner does not exist"
 
 client.run(TOKEN)
 
