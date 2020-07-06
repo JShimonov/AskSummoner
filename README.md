@@ -2,7 +2,7 @@
 
 Thought that it would be fun to experiment with the API from the company that allows me to play a great game on my free time
 (AKA League of Legends). In exploring this API, I found that there are so many cool and interesting things that I can make out
-of it. This project is meant to explore the other summoners (or players) in your game. The end goal of this project is to incorporate all the possible API methods to eventually create a Discord bot that allows players to ask about the players that they are up against - hence the name AskSummoner
+of it. This project is meant to explore other summoners (or players) in your game. The end goal of this project is to incorporate all the possible API methods to eventually create a Discord bot that allows players to ask about the players that they are up against - hence the name AskSummoner
 
 Also learning Python in the process, which is another plus.
 
@@ -10,9 +10,10 @@ Also learning Python in the process, which is another plus.
 
 - [x] Allowed to search summoners
 - [x] Find all their ranks in solo/duo queue and flex queue
-- [x] find their most played champions based on mastery
+- [x] Find their most played champions based on mastery
 - [x] Display most recent match history
 - [x] Implement as Discord bot
+- [x] Differentiate the average of all KDA on a champion to most recent games of that champion KDA
 
 ## Problems that I ran into
 
@@ -20,10 +21,9 @@ In working with the API and gathering necessary information for the bot, I reali
 
 ## Things to add in the future
 
-- [ ] Differentiate the average of all KDA on a champion to most recent games of that champion KDA
 - [ ] Calculate average rank in recent matches
 
-## Things to add after all API features are covered
+## Things to create after all API features are covered
 
 - [ ] Implement as web application
 
