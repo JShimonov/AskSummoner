@@ -61,13 +61,14 @@ async def on_message(message):
         
         # help menu
         # if message.content == '-lol help':
-        type(message)
 
-        command = message.content[message.content.find(' ')+1:]
-        summoner_name = command[command.find(' ')+1:]                             # get the summoner name
-        summoner = SummonerAPI.get_summoner_by_name(summoner_name)       # access the SummonerAPI based off of summoner_name
+        command = message.content[message.content.find(' ')+1:]                     # finds command that user input
+        summoner_name = command[command.find(' ')+1:]                               # get the summoner name
+        summoner = SummonerAPI.get_summoner_by_name(summoner_name)                  # access the SummonerAPI based off of summoner_name
+        #print(summoner)
 
-        # summoner_name = summoner['name']
+        name = summoner['name']
+        
         summoner_id = summoner['id']
         account_id = summoner['accountId']
 
@@ -79,7 +80,7 @@ async def on_message(message):
         #matchlist_ranked = MatchAPI.get_matchlist_ranked(account_id, 420, 13, end_index, begin_index)           # this gets all the ranked matches 
         
         # find the rank of the summoner
-        if command == "rank " + summoner_name:
+        if command == "rank " + name:
             # test if it works
             count = 0
             for i in league:
@@ -90,7 +91,8 @@ async def on_message(message):
 
         # find the 5 most played champs
         if command == "champs " + summoner_name:
-            output = '**Most Played Champs in Ranked for ' + summoner_name + "**\n"
+            print(name)
+            output = '**Most Played Champs in Ranked for ' + name + "**\n"
 
             # Web Scraper
             URL = 'https://na.op.gg/summoner/userName=' + summoner_name
@@ -129,7 +131,7 @@ async def on_message(message):
         # Precondition: First we check the amount of games that op.gg shows for champ
             # if totalPlayed < 11 don't do anything
         if command == "stats " + summoner_name:
-            output = '**Stats for ' + summoner_name + "**\n"
+            output = '**Stats for ' + name + "**\n"
 
             # Web Scraper
             URL = 'https://na.op.gg/summoner/userName=' + summoner_name
