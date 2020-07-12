@@ -25,6 +25,8 @@ In working with the API and gathering necessary information for the bot, I reali
 
 - [ ] Calculate average rank in recent matches
 - [ ] Determine most played champ of recent history
+- [ ] Is summoner good/bad in CS'ing (killing minions)
+- [ ] Is summoner a bad warder
 
 ## Things to create after all API features are covered
 
