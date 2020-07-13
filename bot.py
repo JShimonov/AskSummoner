@@ -6,6 +6,11 @@ import re
 import math
 import LoLConsts as Consts
 import requests
+import csv                                                  # create csv for the stats
+import collections
+
+# for testing
+import time
 
 # delete these
 import random
@@ -131,13 +136,51 @@ async def on_message(message):
         # Precondition: First we check the amount of games that op.gg shows for champ
             # if totalPlayed < 11 don't do anything
         if command == "stats " + summoner_name:
-            await message.channel.send(getStats(name))
-            
-def getStats(name):
-    
+            await message.channel.send(getStats(name, account_id))
 
-    summoner = SummonerAPI.get_summoner_by_name(name)
-    account_id = summoner['accountId']
+        if command == "recentChamps " + summoner_name:
+            await message.channel.send(getTwentyChamps(name, account_id))
+
+# get most played champ out of 20 games
+def getTwentyChamps(name, account_id):
+    # testing
+    start_time = time.time()
+
+    # create output
+    output = "**Most Recent 20 Games - Most Played**"
+
+    matches = MatchAPI.get_matchlist(account_id)
+
+    # store first 20 championId's from matchlist into a dictionary
+    list_of_champs = collections.defaultdict(int)
+
+    for i in range(20):
+        # get the match
+        match = matches['matches'][i]
+
+        # get champion
+        championId = match['champion']
+
+        # convert championId to champion name
+        champion_name = ChampMasteryAPI.get_champion(str(championId))
+
+        # store champ from match into list_of_champs
+        list_of_champs[champion_name] += 1
+    
+    # get the three highest values from list
+    three_highest = nlargest(3, list_of_champs, key = list_of_champs.get)
+
+    # output three_highest
+    for val in three_highest:
+        output +=  "   - " + val + " : " + str(list_of_champs.get(val)) + "\n"
+    
+    # return
+    return output #+ "\n--- %s seconds ---" % (time.time() - start_time)
+
+# get stats from summoner  
+def getStats(name, account_id):
+    # testing
+    start_time = time.time()
 
     # Web Scraper
     URL = 'https://na.op.gg/summoner/userName=' + name
@@ -214,20 +257,20 @@ def getStats(name):
                     kda_value = float(kda[:kda.find(':')])
                     
                     if rounded_kda > kda_value+1:
-                        output += "   - " + name + " will carry\n\n"
+                        output += "   - " + name + " will carry\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     elif rounded_kda > kda_value:
-                        output += "   - " + name + " is good and could potentially help carry\n\n"
+                        output += "   - " + name + " is good and could potentially help carry\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     elif rounded_kda == kda_value:
-                        output += "   - " + name + " somehow managed to get his kda to equal his 5 day kda\n\n"
+                        output += "   - " + name + " somehow managed to get his kda to equal his 5 day kda\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     elif rounded_kda < kda_value-1 or rounded_kda < 1.0:
-                        output += "   - **SHIT PLAYER!!! DO NOT LET THEM PLAY THIS CHAMPION, **\n\n"
+                        output += "   - **SHIT PLAYER!!! DO NOT LET THEM PLAY THIS CHAMPION, **\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     else:
-                        output += "   - " + name + " not that bad, probably had a couple of bad games, but be aware\n\n"
+                        output += "   - " + name + " not that bad, probably had a couple of bad games, but be aware\n\n--- %s seconds ---" % (time.time() - start_time) + "\n"
         except:
-            output += "   - " + name + " does not have 5 champions to analyze in ranked"
+            output += "   - " + name + " does not have 5 champions to analyze in ranked\n--- %s seconds ---" % (time.time() - start_time)
         return output
     except:
-        return "Summoner does not exist"
+        return "Summoner does not exist\n--- %s seconds ---" % (time.time() - start_time)
 
 client.run(TOKEN)
 
