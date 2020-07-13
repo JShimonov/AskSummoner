@@ -147,7 +147,7 @@ def getTwentyChamps(name, account_id):
     start_time = time.time()
 
     # create output
-    output = "**Most Recent 20 Games - Most Played**"
+    output = "**Most Recent 20 Games - Most Played**\n"
 
     matches = MatchAPI.get_matchlist(account_id)
 
