@@ -139,15 +139,34 @@ async def on_message(message):
             await message.channel.send(getStats(name, account_id))
 
         if command == "recentChamps " + summoner_name:
-            await message.channel.send(getTwentyChamps(name, account_id))
+            output = "**Most Recent 20 Games - Most Played**\n"
+
+            most_played = getTwentyChamps(name, account_id)
+            
+            three_highest = nlargest(3, most_played, key = most_played.get)
+
+            # output three_highest
+            for val in three_highest:
+                output +=  "   - " + val + " : " + str(most_played.get(val)) + "\n"
+
+            await message.channel.send(output)
+
+# get average vision score based on the champion that they play
+def getVision(name, account_id):
+    start_time = time.time()
+
+    # create output
+    output = ""
+
+    return output
+
+
+
 
 # get most played champ out of 20 games
 def getTwentyChamps(name, account_id):
     # testing
     start_time = time.time()
-
-    # create output
-    output = "**Most Recent 20 Games - Most Played**\n"
 
     matches = MatchAPI.get_matchlist(account_id)
 
@@ -167,15 +186,8 @@ def getTwentyChamps(name, account_id):
         # store champ from match into list_of_champs
         list_of_champs[champion_name] += 1
     
-    # get the three highest values from list
-    three_highest = nlargest(3, list_of_champs, key = list_of_champs.get)
-
-    # output three_highest
-    for val in three_highest:
-        output +=  "   - " + val + " : " + str(list_of_champs.get(val)) + "\n"
-    
     # return
-    return output #+ "\n--- %s seconds ---" % (time.time() - start_time)
+    return list_of_champs
 
 # get stats from summoner  
 def getStats(name, account_id):
