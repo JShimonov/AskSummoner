@@ -16,6 +16,7 @@ Most of the inspiration that I got from creating this application, was in part d
 - [x] Display most recent match history
 - [x] Implement as Discord bot
 - [x] Differentiate the average of all KDA on a champion to most recent games of that champion KDA
+- [x] Determine most played champ of recent history
 
 ## Problems that I ran into
 
@@ -24,7 +25,6 @@ In working with the API and gathering necessary information for the bot, I reali
 ## Things to add in the future
 
 - [ ] Calculate average rank in recent matches
-- [ ] Determine most played champ of recent history
 - [ ] Is summoner good/bad in CS'ing (killing minions)
 - [ ] Is summoner a bad warder
 
