@@ -8,6 +8,7 @@ import LoLConsts as Consts
 import requests
 import csv                                                  # create csv for the stats
 import collections
+import pandas as pd
 
 # for testing
 import time
@@ -275,7 +276,7 @@ def getStats(name, account_id):
                     elif rounded_kda == kda_value:
                         output += "   - " + name + " somehow managed to get his kda to equal his 5 day kda\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     elif rounded_kda < kda_value-1 or rounded_kda < 1.0:
-                        output += "   - **SHIT PLAYER!!! DO NOT LET THEM PLAY THIS CHAMPION, **\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
+                        output += "   - **DO NOT LET THEM PLAY THIS CHAMPION, **\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     else:
                         output += "   - " + name + " not that bad, probably had a couple of bad games, but be aware\n\n--- %s seconds ---" % (time.time() - start_time) + "\n"
         except:
@@ -283,6 +284,8 @@ def getStats(name, account_id):
         return output
     except:
         return "Summoner does not exist\n--- %s seconds ---" % (time.time() - start_time)
+
+
 
 client.run(TOKEN)
 
