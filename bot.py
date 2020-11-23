@@ -8,7 +8,9 @@ import LoLConsts as Consts
 import requests
 import csv                                                  # create csv for the stats
 import collections
-import pandas as pd
+
+# import mysql
+import mysql.connector
 
 # for testing
 import time
@@ -35,6 +37,19 @@ ClashAPI = Clash(Consts.KEY['api_key'])                     # ClashAPI Test
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+
+# connect database
+db = mysql.connector.connect(
+    host="localhost",
+    user="Joseph",
+    passwd=os.getenv('PASSWD'),
+    database="riotdatabase"
+)
+
+mycursor = db.cursor()
+
+# create table for top-champ history
+mycursor.execute("CREATE TABLE Top_Champ_History (name VARCHAR(50), champion VARCHAR(50), kills smallint, deaths smallint, assists)")
 
 client = discord.Client()
 
