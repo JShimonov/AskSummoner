@@ -305,7 +305,7 @@ def getStats(name, account_id):                                                 
                     elif rounded_kda > kda_value:
                         output += "   - " + name + " is good and could potentially help carry\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     elif rounded_kda == kda_value:
-                        output += "   - " + name + " somehow managed to get his kda to equal his 5 day kda\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
+                        output += "   - " + name + " somehow managed to get his kda to equal his 5 game kda\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     elif rounded_kda < kda_value-1 or rounded_kda < 1.0:
                         output += "   - **DO NOT LET THEM PLAY THIS CHAMPION, **\n\n--- %s seconds --" % (time.time() - start_time) + "\n"
                     else:
