@@ -4,15 +4,18 @@ Thought that it would be fun to experiment with the API from the company that al
 (AKA League of Legends). In exploring this API, I found that there are so many cool and interesting things that I can make out
 of it. This project is meant to explore other summoners (or players) in your game. The end goal of this project is to incorporate all the possible API methods to eventually create a Discord bot that allows players to ask about the players that they are up against - hence the name AskSummoner. 
 
+**I haven't worked on this project in a very long time, but have continued to do so now because it felt like a lot of work could have been done on it.**
+My main goals of this project are to facilitate a better understanding of SQL for myself. Though I have taught myself the basics of the language and its uses in data science, I hope to put it into practice by compressing the runtime of my algorithm when fetching the latest champion stats for a summoner.
+
 # Inspiration
 
 Most of the inspiration that I got from creating this application, was in part due to the fact that I used third party resources when playing the game (no, it wasn't for cheating, but an app known as Blitz). Blitz contained features in 'champion select' that would describe the players on your team and players on the other team. I knew that these minimal descriptons were true and relied on data to support it. Though, AskSummoner aspires to do the same thing that Blitz and other programs do, I was very interested in trying it as well as well as learning more about Python in the process.
 
 ## Frameworks Used
 
-The entire application runs on Python3, but most of the frameworks that are being explored and used are Pandas
+The entire application runs on Python and now on MySQL, as well
 
-Most of the data found is very clunky and makes the overall runtime very tedious for the user. To solve this problem, Pandas is integrated in the backend for clearer visualization of the data and to quickly sort through the necessary data. An issue that will have to be dealt with in order for this to work is to create a proper DataFrame for each user so that the existing DataFrame doesn't have to overwritten
+Most of the data found is very clunky and makes the overall runtime very tedious for the user. I noticed that most of the data that I was collecting (even though minimal) was taking an average runtime of 19 to 21 seconds. For a Discord bot, that's quite upsetting. To drive more efficiency to minimize the runtime, I have chosen to store these values in a database - that way I wouldn't have to iterate over stats that I already have in my database.
 
 ## Functionality of the Application
 
@@ -27,6 +30,7 @@ Most of the data found is very clunky and makes the overall runtime very tedious
 ## Currently Working On
 
 - [ ] Making the run time of the differentiation of average kda faster than it currently is
+- [ ] Integrate MySQL into getStats method
 
 ## Problems that I ran into
 
