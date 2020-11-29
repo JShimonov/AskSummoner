@@ -49,7 +49,12 @@ db = mysql.connector.connect(
 mycursor = db.cursor()
 
 # create table for top-champ history
-mycursor.execute("CREATE TABLE Top_Champ_History (name VARCHAR(50), champion VARCHAR(50), kills smallint, deaths smallint, assists)")
+# mycursor.execute("CREATE TABLE Top_Champ_Stats (player_name VARCHAR(50), champion VARCHAR(50), kills smallint, deaths smallint, assists smallint, PRIMARY KEY (player_name, champion))")
+# mycursor.execute("ALTER TABLE Top_Champ_Stats ADD COLUMN GameID bigint")
+# mycursor.execute("DESCRIBE Top_Champ_Stats")
+
+# for x in mycursor:
+#     print(x)
 
 client = discord.Client()
 
@@ -205,8 +210,8 @@ def getTwentyChamps(name, account_id):
     # return
     return list_of_champs
 
-# get stats from summoner  
-def getStats(name, account_id):
+# Using MySQL find which champions stats need to updated instead of continuously having to update them
+def getStats(name, account_id):                                                                     # get stats - aka last few games on most played champions (stats)
     # testing
     start_time = time.time()
 
@@ -237,11 +242,14 @@ def getStats(name, account_id):
 
                 if totalPlayed_value < 6:
                     output += "   - **Average KDA**: " + kda + "\n\n"
+                
+                # MySQL will have to be implemented here
                 else:
                     output += "   - **Total KDA**: " + kda + "\n"
 
-                    # this part will analyze the past 5 games for the champion
+                    # this part will analyze the last 5 games for the champion from the API itself
                     val = ChampMasteryAPI.get_championId(champion)
+
                     champion_matchlist = MatchAPI.get_matchlist_ranked(account_id, val, 420)
                     gameIds = []                                                                    # store the last 5 games in here
                     counter = 0
@@ -250,6 +258,14 @@ def getStats(name, account_id):
                             break
                         gameIds.append(match['gameId'])
                         counter += 1
+
+                    # since we already have the champion name (in string value) we can check if it already exists in our table as well as the summoner themselves
+                    # if the two values already exist within the table
+                        # check if the latest gameIds that were collected exist for the champion/summoner in the database
+                        # as you iterate over the rows in the db, delete the gameIds that are already exist from the gameIds list if also found in the db itself
+                        # at this point, you should populate the ramaining rows with the gameIds that have remained as well as populate the stats
+                    
+                    # else just keep the code that you already have from below
                     
                     # keep track of the kda
                     kills = 0
